@@ -60,7 +60,7 @@ function App() {
 
   return (
     <div className="App">
-    <div style={{display: "flex", alignItems: "center", justifyContent:"space-around"}}>
+    {/* <div style={{display: "flex", alignItems: "center", justifyContent:"space-around"}}>
       <div>
         <h1>The Wall</h1>
       </div>
@@ -84,8 +84,8 @@ function App() {
           <p>{message.text}</p>
           </div>
         )}
-    </div>
-    
+    </div> */}
+    <Registration/>
     
   </div>
   );
