@@ -46,6 +46,10 @@ function Registration() {
         )
     }
 
+    const handleClick = () => { 
+        console.log("I will take u back to the main page")
+    }
+
     return (
        <div>
        <div style={{display: "flex", alignItems: "center", justifyContent:"space-around"}}>
@@ -81,7 +85,7 @@ function Registration() {
            <button>Sign me up!</button>
        </form >
        <h3>or</h3>
-       <button>View wall as a guest</button>
+       <button onClick={() => handleClick()}>View wall as a guest</button>
       </div>
      
     );
