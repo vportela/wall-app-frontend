@@ -29,7 +29,21 @@ function Registration() {
     const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => { 
         e.preventDefault()
         console.log("i have been submitted")
-        const customTarget = e.target
+        const customTarget = e.target as FormValues
+
+        let firstName = customTarget.firstName.value
+        let lastName = customTarget.lastName.value
+        let userName = customTarget.userName.value
+        let email = customTarget.email.value
+
+        console.log(
+            `
+            First Name: ${firstName}, 
+            Last Name: ${lastName}, 
+            User Name: ${userName},
+            Email: ${email}
+            `
+        )
     }
 
     return (
