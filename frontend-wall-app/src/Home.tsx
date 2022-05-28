@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import './App.css';
 import Login from './Login';
 import Registration from './Registration';
-import Home from './Home';
 
 import {
   BrowserRouter as Router,
@@ -33,7 +32,7 @@ type FormValues = {
   newMessage: {value: string}
 } & EventTarget
 
-function App() {
+function Home() {
 
 
   const [messages, setMessages] = useState<WallPost[]>(initialMessages)
@@ -68,14 +67,38 @@ function App() {
 
   return (
     <div className="App">
-      <Routes>
-        <Route path= "*" element={<Home/>}/>
-        <Route path= "/Registration" element={<Registration/>}/>
-        <Route path= "/Login" element={<Login/>}/>
-
-      </Routes>
+  
+    <div style={{display: "flex", alignItems: "center", justifyContent:"space-around"}}>
+      <div>
+        <h1>The Wall</h1>
+        
+      </div>
+      <div>
+        <button>Sign up</button>
+        <button>Log in</button>
+      </div>
+    </div>
+    <div style={{display: "flex", justifyContent: "center"}}>
+      
+      <form onSubmit={(e) => handleSubmit(e)}>
+        <input type="text" name='newMessage'></input>
+        <button >Say it on the wall</button>
+      </form>
+      
+    </div>
+    <div>
+      {messages.map((message) =>
+        <div key={message.id}>
+          <h4>{message.user}</h4>
+          <p>{message.text}</p>
+          </div>
+        )}
+    </div>
+    {/* <Registration/> */}
+    {/* <Login/> */}
+    
   </div>
   );
 }
 
-export default App;
+export default Home;
