@@ -1,79 +1,24 @@
 import React, { useState } from 'react';
-
 import './App.css';
 import Login from './Login';
 import Registration from './Registration';
 import Home from './Home';
-
 import {
-  BrowserRouter as Router,
   Routes,
   Route,
   Link
 } from 'react-router-dom';
 
-type WallPost = 
-  {
-    id: number,
-    user: string,
-    text: string,
-  }
-
-
-const initialMessages: WallPost[] = [
-  {
-    id: 1,
-    user: "ya_boy_Tomm",
-    text: "do you ever think about how birds don't have hands?"
-  },
-
-]
-
-type FormValues = { 
-  newMessage: {value: string}
-} & EventTarget
 
 function App() {
 
-
-  const [messages, setMessages] = useState<WallPost[]>(initialMessages)
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    console.log("Say it on the wall has been clicked!")
-    e.preventDefault();
-    const customTarget = e.target as FormValues;
-    let newMessage = customTarget.newMessage.value;
-    console.log("newMessage" ,newMessage)
-    const firstInArray = messages[0]
-    //if user is logged in, allow them to post on the wall
-    //if they click the say it on the wall button but they are not logged in
-    //take them to registration.
-    //logged in users should not see sign up/login button
-    //guests should not see input field, perhaps?
-    //how to authorize someone being logged in hmmm. maybe for now use a boolean of loggedIn:true/false?
-
-    setMessages(
-      [
-        {
-          id: firstInArray.id + 1, //creating an id error
-          user: "LOGGED IN USER",
-          text: newMessage,
-        },
-        ...messages
-      ]
-    )
-    newMessage = ""
-  }
-
-
   return (
     <div className="App">
-      <Routes>
-        <Route path= "*" element={<Home/>}/>
-        <Route path= "/Registration" element={<Registration/>}/>
-        <Route path= "/Login" element={<Login/>}/>
-
-      </Routes>
+        <Routes>
+          <Route path= "/" element={<Home/>}/>
+          <Route path= "/Registration" element={<Registration/>}/>
+          <Route path= "/Login" element={<Login/>}/>
+        </Routes>
   </div>
   );
 }

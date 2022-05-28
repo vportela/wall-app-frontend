@@ -1,15 +1,14 @@
-import React, { useState } from 'react';
-
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import Login from './Login';
 import Registration from './Registration';
-
 import {
   BrowserRouter as Router,
   Routes,
   Route,
   Link
 } from 'react-router-dom';
+import axios from 'axios';
 
 type WallPost = 
   {
@@ -34,8 +33,23 @@ type FormValues = {
 
 function Home() {
 
-
   const [messages, setMessages] = useState<WallPost[]>(initialMessages)
+  
+  useEffect(() => { 
+    console.log("in useEffect")
+    axios.get("http://localhost:5000/posts")
+      .then((response) => { 
+        console.log("hooray it was successful!! with response", response)
+        // const result = response.data
+        // console.log("result from response ", result)
+
+       
+        setMessages(response.data)
+      })
+      .catch(() => {
+        console.log("uh oh! something went wrong.")
+      })
+  }, [])
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     console.log("Say it on the wall has been clicked!")
