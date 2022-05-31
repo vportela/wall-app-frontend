@@ -1,21 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
-import Login from './Login';
-import Registration from './Registration';
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Link
-} from 'react-router-dom';
 import axios from 'axios';
 
-type WallPost = 
-  {
+type WallPost = {
     id: number,
     user: string,
     text: string,
-  }
+}
 
 
 const initialMessages: WallPost[] = [
@@ -31,19 +22,19 @@ type FormValues = {
   newMessage: {value: string}
 } & EventTarget
 
+const url = "http://localhost:5000"
+
 function Home() {
 
   const [messages, setMessages] = useState<WallPost[]>(initialMessages)
   
   useEffect(() => { 
     console.log("in useEffect")
-    axios.get("http://localhost:5000/posts")
+    axios.get<WallPost[]>(url + "/posts")
       .then((response) => { 
         console.log("hooray it was successful!! with response", response)
         // const result = response.data
         // console.log("result from response ", result)
-
-       
         setMessages(response.data)
       })
       .catch(() => {
@@ -51,32 +42,70 @@ function Home() {
       })
   }, [])
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    console.log("Say it on the wall has been clicked!")
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    // console.log("Say it on the wall has been clicked!")
     e.preventDefault();
     const customTarget = e.target as FormValues;
     let newMessage = customTarget.newMessage.value;
-    console.log("newMessage" ,newMessage)
-    const firstInArray = messages[0]
-    //if user is logged in, allow them to post on the wall
-    //if they click the say it on the wall button but they are not logged in
-    //take them to registration.
-    //logged in users should not see sign up/login button
-    //guests should not see input field, perhaps?
-    //how to authorize someone being logged in hmmm. maybe for now use a boolean of loggedIn:true/false?
+    // console.log("newMessage" ,newMessage)
+    const firstInArray = messages[messages.length -1]
+    
+    const myNewMessage = {
+      id: firstInArray.id + 10, 
+      user: "LOGGED IN USER",
+      text: newMessage,
+    }
+  
 
-    setMessages(
-      [
-        {
-          id: firstInArray.id + 1, //creating an id error
-          user: "LOGGED IN USER",
-          text: newMessage,
-        },
-        ...messages
-      ]
-    )
-    newMessage = ""
-  }
+  // const testMessage = [{id:100, user: "test user", text:"testingtesting 123"}];
+ 
+
+  // let sendData = () => { //function definition doesnt submit until you call it
+  axios.post<WallPost>(url+"/posts", myNewMessage) //api call -
+    .then((response) => { 
+      console.log("New post successfully created! with response", response)
+      setMessages([response.data, ...messages])
+    })//if call is successful, this line runs
+    .catch((err) => {
+      console.log("there was an error")
+    })
+  // }
+  // sendData() //calling backend here 
+
+  //so you need another axios.get to update the state 
+
+    // try {
+    //   axios.post("http://localhost:3000", myNewMessage)
+    //   console.log("hello from inside submit")
+    //   setMessages(myNewMessage)
+    // } catch (error) {
+    //   console.log(error)
+    // }
+    
+  //   let payload = { id: 1, user: "testing user", text: "testing message"}
+    
+  //   axios.post("http://localhost:5000/posts", payload)
+  //   console.log("payload", payload) 
+  //  }
+  //  makeGetRequest()
+
+
+
+
+    }
+
+    // setMessages(
+    //   [
+    //     {
+    //       id: firstInArray.id + 1, 
+    //       user: "LOGGED IN USER",
+    //       text: newMessage,
+    //     },
+    //     ...messages
+    //   ]
+    // )
+    // newMessage = ""
+  // }
 
 
   return (
