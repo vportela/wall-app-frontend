@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import axios from 'axios';
+import React, { useState , useEffect} from 'react';
 
 type RegistrationForm = {
+    id: number,
     firstName: string,
     lastName: string,
     userName: string,
@@ -8,6 +10,7 @@ type RegistrationForm = {
 }
 
 const initialRegistration = {
+    id: 0,
     firstName: "",
     lastName:"",
     userName:"",
@@ -24,9 +27,24 @@ type FormValues = {
 
 function Registration() {
 
-    const [registration, setRegistration] = useState<RegistrationForm>(initialRegistration)
+    const [registration, setRegistration] = useState<RegistrationForm[]>([])
 
-    const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => { 
+
+    useEffect(() => { 
+        console.log("in useEffect")
+        axios.get<RegistrationForm[]>("http://localhost:5000/registration")
+          .then((response) => { 
+            console.log("hooray it was successful!! with response", response)
+            const result = response.data
+            console.log("result from response ", result)
+            setRegistration(response.data)
+          })
+          .catch(() => {
+            console.log("uh oh! something went wrong.")
+          })
+      }, [])
+
+    const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => { 
         e.preventDefault()
         console.log("i have been submitted")
         const customTarget = e.target as FormValues
@@ -36,14 +54,27 @@ function Registration() {
         let userName = customTarget.userName.value
         let email = customTarget.email.value
 
-        console.log(
-            `
-            First Name: ${firstName}, 
-            Last Name: ${lastName}, 
-            User Name: ${userName},
-            Email: ${email}
-            `
-        )
+        const lastInArray = registration[registration.length - 1]
+
+        const newUser = { 
+            id: lastInArray.id + 1,
+            firstName: firstName,
+            lastName: lastName,
+            userName: userName,
+            email: email
+        }
+
+        console.log("newUser", newUser)
+
+        axios.post<RegistrationForm>("http://localhost:5000/registration", newUser) //api call -
+            .then((response) => { 
+            console.log("New user successfully created! with response", response)
+            setRegistration([ ...registration, response.data,])
+            
+            })//if call is successful, this line runs
+            .catch((err) => {
+            console.log("there was an error")
+            })
     }
 
     const handleClick = () => { 

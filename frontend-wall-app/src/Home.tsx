@@ -9,28 +9,20 @@ type WallPost = {
 }
 
 
-const initialMessages: WallPost[] = [
-  {
-    id: 1,
-    user: "ya_boy_Tomm",
-    text: "do you ever think about how birds don't have hands?"
-  },
-
-]
 
 type FormValues = { 
   newMessage: {value: string}
 } & EventTarget
 
-const url = "http://localhost:5000"
+
 
 function Home() {
 
-  const [messages, setMessages] = useState<WallPost[]>(initialMessages)
+  const [messages, setMessages] = useState<WallPost[]>([])
   
   useEffect(() => { 
     console.log("in useEffect")
-    axios.get<WallPost[]>(url + "/posts")
+    axios.get<WallPost[]>("http://localhost:5000/posts")
       .then((response) => { 
         console.log("hooray it was successful!! with response", response)
         // const result = response.data
@@ -48,10 +40,10 @@ function Home() {
     const customTarget = e.target as FormValues;
     let newMessage = customTarget.newMessage.value;
     // console.log("newMessage" ,newMessage)
-    const firstInArray = messages[messages.length -1]
+    const lastInArray = messages[messages.length - 1]
     
     const myNewMessage = {
-      id: firstInArray.id + 10, 
+      id: lastInArray.id + 1, 
       user: "LOGGED IN USER",
       text: newMessage,
     }
@@ -61,10 +53,10 @@ function Home() {
  
 
   // let sendData = () => { //function definition doesnt submit until you call it
-  axios.post<WallPost>(url+"/posts", myNewMessage) //api call -
+  axios.post<WallPost>("http://localhost:5000/posts", myNewMessage) //api call -
     .then((response) => { 
       console.log("New post successfully created! with response", response)
-      setMessages([response.data, ...messages])
+      setMessages([ ...messages, response.data,])
     })//if call is successful, this line runs
     .catch((err) => {
       console.log("there was an error")
@@ -74,38 +66,9 @@ function Home() {
 
   //so you need another axios.get to update the state 
 
-    // try {
-    //   axios.post("http://localhost:3000", myNewMessage)
-    //   console.log("hello from inside submit")
-    //   setMessages(myNewMessage)
-    // } catch (error) {
-    //   console.log(error)
-    // }
-    
-  //   let payload = { id: 1, user: "testing user", text: "testing message"}
-    
-  //   axios.post("http://localhost:5000/posts", payload)
-  //   console.log("payload", payload) 
-  //  }
-  //  makeGetRequest()
-
-
-
-
     }
 
-    // setMessages(
-    //   [
-    //     {
-    //       id: firstInArray.id + 1, 
-    //       user: "LOGGED IN USER",
-    //       text: newMessage,
-    //     },
-    //     ...messages
-    //   ]
-    // )
-    // newMessage = ""
-  // }
+  
 
 
   return (
