@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import {useNavigate} from 'react-router-dom';
 
 type LoginForm = {
     userName: string,
@@ -17,6 +18,8 @@ type FormValues = {
 
 
 function Login() {
+
+    let navigate = useNavigate();
 
     const [login, setLogin] = useState<LoginForm>(initialLogin)
     const [forgotPasswordMessage, setForgotPasswordMessage] =useState<string>("")
@@ -47,10 +50,10 @@ function Login() {
        <div>
        <div style={{display: "flex", alignItems: "center", justifyContent:"space-around"}}>
         <div>
-          <h1>The Wall</h1>
+          <h1 onClick={() => {navigate("/")}}>The Wall</h1>
         </div>
         <div>
-          <button>Sign up</button>
+          <button onClick={() => {navigate("/registration")}}>Sign up</button>
         </div>
       </div>
 

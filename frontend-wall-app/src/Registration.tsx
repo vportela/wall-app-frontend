@@ -86,26 +86,25 @@ function Registration() {
     //     console.log("I will take u back to the main page")
     // }
 
-    const HandleClick = () => { 
-      let navigate = useNavigate();
+    let navigate = useNavigate();
 
-      const handleClick = async (e:React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        e.preventDefault();
-        await (e.target);
-        navigate("/", {replace: true});
-        
-      }
-    }
+    // const HandleClick = () => { 
+    //   const handleClick = async (e:React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    //     e.preventDefault()
+    //     await (e.target);
+    //     navigate("/", {replace: true});
+    //   }
+    // }
 
 
     return (
        <div>
        <div style={{display: "flex", alignItems: "center", justifyContent:"space-around"}}>
         <div>
-          <h1>The Wall</h1>
+          <h1 onClick={() => {navigate("/")}}>The Wall</h1>
         </div>
         <div>
-          <button>Log in</button>
+          <button onClick={() => {navigate("/login")}} >Log in</button>
         </div>
       </div>
 
@@ -133,7 +132,7 @@ function Registration() {
            <button>Sign me up!</button>
        </form >
        <h3>or</h3>
-       <button onClick={(e) => HandleClick()}>View wall as a guest</button>
+       <button onClick={() => {navigate("/")}}>View wall as a guest</button>
       </div>
      
     );

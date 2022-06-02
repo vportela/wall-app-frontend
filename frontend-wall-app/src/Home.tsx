@@ -74,21 +74,19 @@ function Home() {
     }
 
   
-const Contact = () => { 
-  const navigate = useNavigate();
-}
+  let navigate = useNavigate();
 
   return (
     <div className="App">
   
     <div style={{display: "flex", alignItems: "center", justifyContent:"space-around"}}>
       <div>
-        <h1>The Wall</h1>
+        <h1 onClick={() => {navigate("/")}}>The Wall</h1>
         
       </div>
       <div>
-        <button>Sign up</button>
-        <button>Log in</button>
+        <button onClick={() => {navigate("/registration")}}>Sign up</button>
+        <button onClick={() => {navigate("/login")}}>Log in</button>
       </div>
     </div>
     <div style={{display: "flex", justifyContent: "center"}}>
