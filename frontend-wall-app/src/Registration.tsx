@@ -1,5 +1,10 @@
 import axios from 'axios';
 import React, { useState , useEffect} from 'react';
+import {
+  Routes,
+  Route,
+  useNavigate
+} from 'react-router-dom';
 
 type RegistrationForm = {
     id: number,
@@ -77,9 +82,21 @@ function Registration() {
             })
     }
 
-    const handleClick = () => { 
-        console.log("I will take u back to the main page")
+    // const handleClick = () => { 
+    //     console.log("I will take u back to the main page")
+    // }
+
+    const HandleClick = () => { 
+      let navigate = useNavigate();
+
+      const handleClick = async (e:React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        e.preventDefault();
+        await (e.target);
+        navigate("/", {replace: true});
+        
+      }
     }
+
 
     return (
        <div>
@@ -116,7 +133,7 @@ function Registration() {
            <button>Sign me up!</button>
        </form >
        <h3>or</h3>
-       <button onClick={() => handleClick()}>View wall as a guest</button>
+       <button onClick={(e) => HandleClick()}>View wall as a guest</button>
       </div>
      
     );

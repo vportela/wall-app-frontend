@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
 import axios from 'axios';
+import {
+  Routes,
+  Route,
+  useNavigate
+} from 'react-router-dom';
 
 type WallPost = {
     id: number,
@@ -69,7 +74,9 @@ function Home() {
     }
 
   
-
+const Contact = () => { 
+  const navigate = useNavigate();
+}
 
   return (
     <div className="App">
