@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import './App.css';
 import axios from 'axios';
 import {
-  Routes,
-  Route,
   useNavigate
 } from 'react-router-dom';
 
@@ -23,7 +21,7 @@ type FormValues = {
 
 function Home() {
 
-  const [messages, setMessages] = useState<WallPost[]>([])
+  const [wallPosts, setWallPosts] = useState<WallPost[]>([])
   
   useEffect(() => { 
     console.log("in useEffect")
@@ -32,7 +30,7 @@ function Home() {
         console.log("hooray it was successful!! with response", response)
         // const result = response.data
         // console.log("result from response ", result)
-        setMessages(response.data)
+        setWallPosts(response.data)
       })
       .catch(() => {
         console.log("uh oh! something went wrong.")
@@ -45,7 +43,7 @@ function Home() {
     const customTarget = e.target as FormValues;
     let newMessage = customTarget.newMessage.value;
     // console.log("newMessage" ,newMessage)
-    const lastInArray = messages[messages.length - 1]
+    const lastInArray = wallPosts[wallPosts.length - 1]
     
     const myNewMessage = {
       id: lastInArray.id + 1, 
@@ -61,7 +59,7 @@ function Home() {
   axios.post<WallPost>("http://localhost:5000/posts", myNewMessage) //api call -
     .then((response) => { 
       console.log("New post successfully created! with response", response)
-      setMessages([ ...messages, response.data,])
+      setWallPosts([ ...wallPosts, response.data,])
     })//if call is successful, this line runs
     .catch((err) => {
       console.log("there was an error")
@@ -98,10 +96,11 @@ function Home() {
       
     </div>
     <div>
-      {messages.map((message) =>
-        <div key={message.id}>
-          <h4>{message.user}</h4>
-          <p>{message.text}</p>
+      {/* try to keep backend and frontend names consistent */}
+      {wallPosts.map((wallPost) => 
+        <div key={wallPost.id}>
+          <h4>{wallPost.user}</h4>
+          <p>{wallPost.text}</p>
           </div>
         )}
     </div>

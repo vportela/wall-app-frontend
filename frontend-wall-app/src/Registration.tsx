@@ -1,26 +1,24 @@
 import axios from 'axios';
 import React, { useState , useEffect} from 'react';
 import {
-  Routes,
-  Route,
   useNavigate
 } from 'react-router-dom';
 
-type RegistrationForm = {
+type User = {
     id: number,
     firstName: string,
     lastName: string,
     userName: string,
     email: string,
-}
+} 
 
-const initialRegistration = {
-    id: 0,
-    firstName: "",
-    lastName:"",
-    userName:"",
-    email:"",
-}
+// const users = {
+//     id: 0,
+//     firstName: "",
+//     lastName:"",
+//     userName:"",
+//     email:"",
+// }
 
 type FormValues = { 
     firstName: {value:string},
@@ -30,23 +28,23 @@ type FormValues = {
 } & EventTarget
 
 
-function Registration() {
+const Registration = () => {
 
-  let navigate = useNavigate();
+  const navigate = useNavigate();
 
 
-  const [registration, setRegistration] = useState<RegistrationForm[]>([])
+  const [user, setUser] = useState<User[]>([])
   const [registrationErrorMessage, setRegistrationErrorMessage] = useState<string>("")
 
 
   useEffect(() => { 
       console.log("in useEffect")
-      axios.get<RegistrationForm[]>("http://localhost:5000/registration")
+      axios.get<User[]>("http://localhost:5000/registration")
         .then((response) => { 
           console.log("hooray it was successful!! with response", response)
           const result = response.data
           console.log("result from response ", result)
-          setRegistration(response.data)
+          setUser(response.data)
         })
         .catch(() => {
           console.log("uh oh! something went wrong.")
@@ -63,7 +61,7 @@ function Registration() {
       let userName = customTarget.userName.value
       let email = customTarget.email.value
 
-      const lastInArray = registration[registration.length - 1]
+      const lastInArray = user[user.length - 1]
 
       const newUser = { 
           id: lastInArray.id + 1,
@@ -75,17 +73,15 @@ function Registration() {
 
       console.log("newUser", newUser)
 
-      axios.post<RegistrationForm>("http://localhost:5000/registration", newUser) //api call -
+      axios.post<User>("http://localhost:5000/registration", newUser) //api call -
           .then((response) => { 
-          console.log("New user successfully created! with response", response)
-          setRegistration([ ...registration, response.data,])
-          {navigate("/")}
-          
-          
+            console.log("New user successfully created! with response", response)
+            setUser([ ...user, response.data])
+            navigate("/login")
           })//if call is successful, this line runs
           .catch((err) => {
-          console.log("there was an error")
-          setRegistrationErrorMessage("Could not sign you up, please check all fields and try again!")
+            console.log("there was an error")
+            setRegistrationErrorMessage("Something went wrong, please try again.")
 
           })
   }
@@ -108,15 +104,12 @@ function Registration() {
        </div>
 
        <form 
-        style=
-            {
-                {
-                    display: "flex", 
-                    justifyContent: "center", 
-                    alignItems: "center", 
-                    flexDirection: "column"
-                }
-            }
+        style={{
+          display: "flex", 
+          justifyContent: "center", 
+          alignItems: "center", 
+          flexDirection: "column"
+        }}
         onSubmit={(e) => handleFormSubmit(e)}
         >
            <input type= "text" name='firstName' placeholder='First name'></input>
