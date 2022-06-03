@@ -10,6 +10,7 @@ type User = {
     lastName: string,
     userName: string,
     email: string,
+    password: string
 } 
 
 // const users = {
@@ -25,6 +26,7 @@ type FormValues = {
     lastName: {value:string},
     userName: {value:string},
     email: {value:string},
+    password: {value:string}
 } & EventTarget
 
 
@@ -60,6 +62,7 @@ const Registration = () => {
       let lastName = customTarget.lastName.value
       let userName = customTarget.userName.value
       let email = customTarget.email.value
+      let password = customTarget.password.value
 
       const lastInArray = user[user.length - 1]
 
@@ -68,7 +71,8 @@ const Registration = () => {
           firstName: firstName,
           lastName: lastName,
           userName: userName,
-          email: email
+          email: email,
+          password: password
       }
 
       console.log("newUser", newUser)
@@ -116,6 +120,7 @@ const Registration = () => {
            <input type= "text" name='lastName' placeholder='Last name'></input>
            <input type= "text" name='userName' placeholder='User name'></input>
            <input type= "text" name='email' placeholder='Email'></input>
+           <input type= "text" name='password' placeholder='Password'></input>
            <br/>
            <button>Sign me up!</button>
            <h5 style={{color: "red"}}>{registrationErrorMessage}</h5>

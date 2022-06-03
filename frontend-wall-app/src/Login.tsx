@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import {useNavigate} from 'react-router-dom';
+import axios from 'axios';
 
 type LoginForm = {
     userName: string,
@@ -23,6 +24,8 @@ function Login() {
 
     const [login, setLogin] = useState<LoginForm>(initialLogin)
     const [forgotPasswordMessage, setForgotPasswordMessage] =useState<string>("")
+    const [loginFeedback, setLoginFeedback] = useState<string>("")
+    const [loginFeedbackStyle, setLoginFeedbackStyle] = useState<string>("black")
 
     const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => { 
         e.preventDefault()
@@ -30,16 +33,25 @@ function Login() {
         const customTarget = e.target as FormValues
 
         let password = customTarget.password.value
-      
         let userName = customTarget.userName.value
+
+        const loginInfo = { 
+            userName: userName,
+            password: password
+        }
        
 
-        console.log(
-            `
-            User Name: ${userName},
-            Password: ${password}
-            `
-        )
+        console.log(`User Name: ${userName}, Password: ${password}`)
+
+        axios.post<LoginForm>("http://localhost:5000/login", loginInfo) //api call -
+          .then((response) => { 
+            console.log("Yay login successful!", response.data)
+          })
+          .catch((err) => {
+            console.log("there was an error")
+            setLoginFeedback("Cannot find that username or password, please try again.")
+            setLoginFeedbackStyle("red")
+          })
     }
 
     const handleClick = () => { 
@@ -73,6 +85,7 @@ function Login() {
             }
         onSubmit={(e) => handleFormSubmit(e)}
         >
+            <h6 style={{color: `${loginFeedbackStyle}`}}>{loginFeedback}</h6>
            <input type= "text" name='userName' placeholder='User name'></input>
            <input type= "text" name='password' placeholder='Password'></input>
            <br/>
