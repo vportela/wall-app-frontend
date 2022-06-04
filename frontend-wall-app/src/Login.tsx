@@ -15,7 +15,18 @@ type User = {
     email: string,
     password: string
 } 
+export type SafeUser = { 
+    id: string,
+    firstName: string,
+    lastName: string,
+    userName: string,
+    email: string,
+    loggedIn: boolean
+}
 
+type LoginProps = { 
+    setLoggedInUser: (safeUser: SafeUser) => void
+}
 const initialLogin = {
     userName:"",
     password:"",
@@ -26,14 +37,14 @@ type FormValues = {
     password: {value:string},
 } & EventTarget
 
-
-function Login() {
+function Login({setLoggedInUser}: LoginProps) {
 
     let navigate = useNavigate();
 
     const [forgotPasswordMessage, setForgotPasswordMessage] =useState<string>("")
     const [loginFeedback, setLoginFeedback] = useState<string>("")
     const [loginFeedbackStyle, setLoginFeedbackStyle] = useState<string>("black")
+   
 
 
     const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => { 
@@ -60,9 +71,10 @@ function Login() {
         //back to front end: when i find one, i redirect user to home directory
         //if the response is not successful (.catch) with a 400 status, i show
         //the error recieved fromthe backend. otherwise display generic error message.
-        axios.post<LoginForm>("http://localhost:5000/login", loginInfo) //api call -
+        axios.post<SafeUser>("http://localhost:5000/login", loginInfo) //api call -
           .then((response) => { 
             console.log("user successfully logged in", response.data)
+            setLoggedInUser(response.data)
             navigate("/")
           })
           .catch((error) => {

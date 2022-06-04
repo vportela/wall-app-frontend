@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './App.css';
-import Login from './Login';
+import Login, { SafeUser } from './Login';
 import Registration from './Registration';
 import Home from './Home';
 import {
@@ -10,13 +10,14 @@ import {
 
 
 function App() {
+  const [loggedInUser, setLoggedInUser] = useState<SafeUser>()
 
   return (
     <div className="App">
         <Routes>
-          <Route path= "/" element={<Home/>}/>
+          <Route path= "/" element={<Home loggedInUser={loggedInUser}/>}/>
           <Route path= "/registration" element={<Registration/>}/>
-          <Route path= "/login" element={<Login/>}/>
+          <Route path= "/login" element={<Login setLoggedInUser={setLoggedInUser}/>}/>
         </Routes>
   </div>
   );

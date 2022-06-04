@@ -5,11 +5,15 @@ import {
   useNavigate
 } from 'react-router-dom';
 import { userInfo } from 'os';
+import { SafeUser } from './Login';
 
 type WallPost = {
     id: number,
     user: string,
     text: string,
+}
+type HomeProps = { 
+  loggedInUser: SafeUser | undefined
 }
 
 type User = { 
@@ -29,33 +33,9 @@ type FormValues = {
 
 
 
-function Home() {
+function Home({loggedInUser}: HomeProps) {
 
   const [wallPosts, setWallPosts] = useState<WallPost[]>([])
-
-
-
-  useEffect(() => { 
-    axios.get<User[]>("http://localhost:5000/login")
-    .then((response) => { 
-      console.log("getting user from /login with response", response)
-    })
-  })
-
-  // useEffect(() => { 
-  //   console.log("in useEffect")
-  //   axios.get<User[]>("http://localhost:5000/users")
-  //     .then((response) => { 
-  //       console.log("hooray it was successful!! with response", response)
-  //       const result = response.data
-  //       console.log("result from response ", result)
-  //       setUsers(response.data)
-  //     })
-  //     .catch(() => {
-  //       console.log("uh oh! something went wrong.")
-  //     })
-  // }, [])
-
   
   useEffect(() => { 
     console.log("in useEffect")
@@ -114,7 +94,11 @@ function Home() {
     <div style={{display: "flex", alignItems: "center", justifyContent:"space-around"}}>
       <div>
         <h1 onClick={() => {navigate("/")}}>The Wall</h1>
-        
+        <div>
+          <h2>logged in user info </h2>
+          <h2>username {loggedInUser?.userName}</h2>
+          <h2> is logged in {loggedInUser?.loggedIn.toString()}</h2>
+        </div>
       </div>
       <div>
         <button onClick={() => {navigate("/registration")}}>Sign up</button>
