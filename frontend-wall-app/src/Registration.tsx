@@ -5,12 +5,13 @@ import {
 } from 'react-router-dom';
 
 type User = {
-    id: number,
+    id: string,
     firstName: string,
     lastName: string,
     userName: string,
     email: string,
-    password: string
+    password: string,
+    loggedIn: boolean
 } 
 
 // const users = {
@@ -35,9 +36,9 @@ const Registration = () => {
   const navigate = useNavigate();
 
 
-  const [user, setUser] = useState<User[]>([])
+  const [users, setUsers] = useState<User[]>([])
   const [registrationErrorMessage, setRegistrationErrorMessage] = useState<string>("")
-
+  
 
   useEffect(() => { 
       console.log("in useEffect")
@@ -46,7 +47,7 @@ const Registration = () => {
           console.log("hooray it was successful!! with response", response)
           const result = response.data
           console.log("result from response ", result)
-          setUser(response.data)
+          setUsers(response.data)
         })
         .catch(() => {
           console.log("uh oh! something went wrong.")
@@ -64,15 +65,16 @@ const Registration = () => {
       let email = customTarget.email.value
       let password = customTarget.password.value
 
-      const lastInArray = user[user.length - 1]
+      const lastInArray = users[users.length - 1]
 
-      const newUser = { 
-          id: lastInArray.id + 1,
+      const newUser: User = { 
+          id: (Number(lastInArray.id) + 1).toString(),
           firstName: firstName,
           lastName: lastName,
           userName: userName,
           email: email,
-          password: password
+          password: password,
+          loggedIn: false
       }
 
       console.log("newUser", newUser)
@@ -80,7 +82,7 @@ const Registration = () => {
       axios.post<User>("http://localhost:5000/registration", newUser) //api call -
           .then((response) => { 
             console.log("New user successfully created! with response", response)
-            setUser([ ...user, response.data])
+            setUsers([ ...users, response.data])
             navigate("/login")
           })//if call is successful, this line runs
           .catch((err) => {
@@ -120,7 +122,7 @@ const Registration = () => {
            <input type= "text" name='lastName' placeholder='Last name'></input>
            <input type= "text" name='userName' placeholder='User name'></input>
            <input type= "text" name='email' placeholder='Email'></input>
-           <input type= "text" name='password' placeholder='Password'></input>
+           <input type= "password" name='password' placeholder='Password'></input>
            <br/>
            <button>Sign me up!</button>
            <h5 style={{color: "red"}}>{registrationErrorMessage}</h5>

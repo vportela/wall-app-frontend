@@ -4,6 +4,7 @@ import axios from 'axios';
 import {
   useNavigate
 } from 'react-router-dom';
+import { userInfo } from 'os';
 
 type WallPost = {
     id: number,
@@ -11,6 +12,15 @@ type WallPost = {
     text: string,
 }
 
+type User = { 
+  id: number,
+  firstName: string,
+  lastName: string,
+  userName: string,
+  email: string,
+  password: string,
+  loggedIn: boolean
+}
 
 
 type FormValues = { 
@@ -22,6 +32,16 @@ type FormValues = {
 function Home() {
 
   const [wallPosts, setWallPosts] = useState<WallPost[]>([])
+
+
+
+  useEffect(() => { 
+    axios.get<User[]>("http://localhost:5000/login")
+    .then((response) => { 
+      console.log("getting user from /login with response", response)
+    })
+  })
+
   
   useEffect(() => { 
     console.log("in useEffect")

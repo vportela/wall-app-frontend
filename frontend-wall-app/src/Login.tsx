@@ -7,6 +7,15 @@ type LoginForm = {
     password: string,
 }
 
+type User = {
+    id: number,
+    firstName: string,
+    lastName: string,
+    userName: string,
+    email: string,
+    password: string
+} 
+
 const initialLogin = {
     userName:"",
     password:"",
@@ -22,7 +31,6 @@ function Login() {
 
     let navigate = useNavigate();
 
-    const [login, setLogin] = useState<LoginForm>(initialLogin)
     const [forgotPasswordMessage, setForgotPasswordMessage] =useState<string>("")
     const [loginFeedback, setLoginFeedback] = useState<string>("")
     const [loginFeedbackStyle, setLoginFeedbackStyle] = useState<string>("black")
@@ -44,15 +52,28 @@ function Login() {
 
         console.log(`User Name: ${userName}, Password: ${password}`)
 
+        //calling my api and passing in my loginInfo which goes into my request body.
+        //in the backend: first try finding a user whos username and password match 
+        //my request body. 
+        //if i find one, send a successful response.
+        //if i dont find one, return a 400.
+        //back to front end: when i find one, i redirect user to home directory
+        //if the response is not successful (.catch) with a 400 status, i show
+        //the error recieved fromthe backend. otherwise display generic error message.
         axios.post<LoginForm>("http://localhost:5000/login", loginInfo) //api call -
           .then((response) => { 
-            console.log("login info successfully sent to the backend", response.data)
-            
+            console.log("user successfully logged in", response.data)
+            navigate("/")
           })
-          .catch((err) => {
-            console.log("there was an error")
-            setLoginFeedback("Cannot find that username or password, please try again.")
-            setLoginFeedbackStyle("red")
+          .catch((error) => {
+            console.log("there was an error", error)
+            if(error.response.status === 400){ 
+                setLoginFeedback(error.response.data)
+                setLoginFeedbackStyle("red")
+            } else { 
+                setLoginFeedback("Something went wrong, please try again.")
+                setLoginFeedbackStyle("red")
+            }
           })
     }
 
@@ -86,10 +107,11 @@ function Login() {
                 }
             }
         onSubmit={(e) => handleFormSubmit(e)}
+
         >
             <h6 style={{color: `${loginFeedbackStyle}`}}>{loginFeedback}</h6>
            <input type= "text" name='userName' placeholder='User name'></input>
-           <input type= "text" name='password' placeholder='Password'></input>
+           <input type= "password" name='password' placeholder='Password'></input>
            <br/>
            <button>Log in!</button>
        </form >
