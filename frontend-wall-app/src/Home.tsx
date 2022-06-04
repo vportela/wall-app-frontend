@@ -42,6 +42,20 @@ function Home() {
     })
   })
 
+  // useEffect(() => { 
+  //   console.log("in useEffect")
+  //   axios.get<User[]>("http://localhost:5000/users")
+  //     .then((response) => { 
+  //       console.log("hooray it was successful!! with response", response)
+  //       const result = response.data
+  //       console.log("result from response ", result)
+  //       setUsers(response.data)
+  //     })
+  //     .catch(() => {
+  //       console.log("uh oh! something went wrong.")
+  //     })
+  // }, [])
+
   
   useEffect(() => { 
     console.log("in useEffect")
