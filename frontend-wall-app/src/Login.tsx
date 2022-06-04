@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {useNavigate} from 'react-router-dom';
 import axios from 'axios';
 
@@ -27,6 +27,7 @@ function Login() {
     const [loginFeedback, setLoginFeedback] = useState<string>("")
     const [loginFeedbackStyle, setLoginFeedbackStyle] = useState<string>("black")
 
+
     const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => { 
         e.preventDefault()
         console.log("i have been submitted")
@@ -45,7 +46,8 @@ function Login() {
 
         axios.post<LoginForm>("http://localhost:5000/login", loginInfo) //api call -
           .then((response) => { 
-            console.log("Yay login successful!", response.data)
+            console.log("login info successfully sent to the backend", response.data)
+            
           })
           .catch((err) => {
             console.log("there was an error")
