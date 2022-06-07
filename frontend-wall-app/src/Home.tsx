@@ -4,7 +4,6 @@ import axios from 'axios';
 import {
   useNavigate
 } from 'react-router-dom';
-import { userInfo } from 'os';
 import { SafeUser } from './Login';
 
 type WallPost = {
@@ -13,7 +12,7 @@ type WallPost = {
     text: string,
 }
 type HomeProps = { 
-  loggedInUser: SafeUser | undefined
+  loggedInUser: SafeUser | undefined,
 }
 
 type User = { 
@@ -33,7 +32,7 @@ type FormValues = {
 
 
 
-function Home({loggedInUser}: HomeProps) {
+function Home(props: HomeProps) {
 
   const [wallPosts, setWallPosts] = useState<WallPost[]>([])
   
@@ -96,8 +95,8 @@ function Home({loggedInUser}: HomeProps) {
         <h1 onClick={() => {navigate("/")}}>The Wall</h1>
         <div>
           <h2>logged in user info </h2>
-          <h2>username {loggedInUser?.userName}</h2>
-          <h2> is logged in {loggedInUser?.loggedIn.toString()}</h2>
+          <h2>username {props.loggedInUser?.userName}</h2>
+          <h2> is logged in {props.loggedInUser?.loggedIn.toString()}</h2>
         </div>
       </div>
       <div>
