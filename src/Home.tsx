@@ -94,9 +94,7 @@ function Home(props: HomeProps) {
       <div>
         <h1 onClick={() => {navigate("/")}}>The Wall</h1>
         <div>
-          <h2>logged in user info </h2>
-          <h2>username {props.loggedInUser?.userName}</h2>
-          <h2> is logged in {props.loggedInUser?.loggedIn.toString()}</h2>
+          <h6>logged in user: {props.loggedInUser?.userName}</h6>
         </div>
       </div>
       <div>
@@ -104,14 +102,17 @@ function Home(props: HomeProps) {
         <button onClick={() => {navigate("/login")}}>Log in</button>
       </div>
     </div>
-    <div style={{display: "flex", justifyContent: "center"}}>
-      
+
+    {/* {If loggedInUser is NOT undefined && (render whats in here) } */}
+    {props.loggedInUser !== undefined && (
+      <div style={{display: "flex", justifyContent: "center"}}>
       <form onSubmit={(e) => handleSubmit(e)}>
         <input type="text" name='newMessage'></input>
         <button >Say it on the wall</button>
       </form>
-      
     </div>
+    )}
+    
     <div>
       {/* try to keep backend and frontend names consistent */}
       {wallPosts.map((wallPost) => 
