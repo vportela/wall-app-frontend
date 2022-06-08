@@ -50,6 +50,8 @@ function Home(props: HomeProps) {
       })
   }, [])
 
+
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     // console.log("Say it on the wall has been clicked!")
     e.preventDefault();
@@ -64,25 +66,24 @@ function Home(props: HomeProps) {
       text: newMessage,
     }
   
+    // if the user is undefined, dont let them post. you want to prevent
+    //the call from ever going into the backend. 
 
-  // const testMessage = [{id:100, user: "test user", text:"testingtesting 123"}];
- 
-
-  // let sendData = () => { //function definition doesnt submit until you call it
-  axios.post<WallPost>("http://localhost:5000/posts", myNewMessage) //api call -
-    .then((response) => { 
-      console.log("New post successfully created! with response", response)
-      setWallPosts([ ...wallPosts, response.data,])
-    })//if call is successful, this line runs
-    .catch((err) => {
-      console.log("there was an error")
-    })
-  // }
-  // sendData() //calling backend here 
-
-  //so you need another axios.get to update the state 
-
+    if(props.loggedInUser !== undefined) { 
+      // let sendData = () => { //function definition doesnt submit until you call it
+      axios.post<WallPost>("http://localhost:5000/posts", myNewMessage) //api call -
+        .then((response) => { 
+          console.log("New post successfully created! with response", response)
+          setWallPosts([ ...wallPosts, response.data,])
+        })//if call is successful, this line runs
+        .catch((err) => {
+          console.log("there was an error")
+        })
     }
+    
+
+
+  }
 
   
   let navigate = useNavigate();
@@ -103,14 +104,15 @@ function Home(props: HomeProps) {
       </div>
     </div>
 
+  
     {/* {If loggedInUser is NOT undefined && (render whats in here) } */}
     {props.loggedInUser !== undefined && (
       <div style={{display: "flex", justifyContent: "center"}}>
-      <form onSubmit={(e) => handleSubmit(e)}>
-        <input type="text" name='newMessage'></input>
-        <button >Say it on the wall</button>
-      </form>
-    </div>
+        <form onSubmit={(e) => handleSubmit(e)}>
+          <input type="text" name='newMessage'></input>
+          <button >Say it on the wall</button>
+        </form>
+      </div>
     )}
     
     <div>
