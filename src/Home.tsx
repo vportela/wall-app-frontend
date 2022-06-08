@@ -64,6 +64,7 @@ function Home(props: HomeProps) {
       id: lastInArray.id + 1, 
       user: "LOGGED IN USER",
       text: newMessage,
+      loggedInUser: props.loggedInUser
     }
   
     // if the user is undefined, dont let them post. you want to prevent
