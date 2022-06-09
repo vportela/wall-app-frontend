@@ -8,15 +8,14 @@ import {
   Route,
 } from 'react-router-dom';
 
-
-// TODO: add login to session or local storage
-// TODO: Associate the user created post to the user. (primary key and foreign key).
+// TODO: Associate the user created post to theg user. (primary key and foreign key).
 // TODO: display post made by the user
 // TODO: display existing created posts
 // TODO: database time babey. 
 
 function App() {
-  const [loggedInUser, setLoggedInUser] = useState<SafeUser>()
+  const localStorageUser: SafeUser | undefined = JSON.parse(localStorage.getItem('loggedInUser')!) 
+  const [loggedInUser, setLoggedInUser] = useState<SafeUser | undefined>(localStorageUser)
   console.log("loggedInUser", loggedInUser)
   return (
     <div className="App">
