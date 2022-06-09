@@ -8,9 +8,12 @@ import {
   Route,
 } from 'react-router-dom';
 
-// TODO: Associate the user created post to theg user. (primary key and foreign key).
-// TODO: display post made by the user
+// TODO: Associate the user created post to the user. (primary key and foreign key).
+//user id should display the user that created the post
+//add some more users to the backend, make the posts associate with the existing users.
 // TODO: display existing created posts
+  //set up initial data
+// TODO: display all posts and their associated users
 // TODO: database time babey. 
 
 function App() {

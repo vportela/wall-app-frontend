@@ -8,8 +8,9 @@ import { SafeUser } from './Login';
 
 type WallPost = {
     id: number,
-    user: string,
     text: string,
+    userId: string,
+    userName: string
 }
 
 type WallPostRequest = {
@@ -76,6 +77,7 @@ function Home(props: HomeProps) {
       axios.post<WallPost>("http://localhost:5000/posts", requestBody) //api call -
         .then((response) => { 
           console.log("New post successfully created! with response", response)
+          
           setWallPosts([ ...wallPosts, response.data,])
         })//if call is successful, this line runs
         .catch((error) => {
@@ -87,7 +89,7 @@ function Home(props: HomeProps) {
         })
     }
     
-
+    console.log("wallposts", wallPosts)
 
   }
 
@@ -126,7 +128,7 @@ function Home(props: HomeProps) {
       {/* try to keep backend and frontend names consistent */}
       {wallPosts.map((wallPost) => 
         <div key={wallPost.id}>
-          <h4>{wallPost.user}</h4>
+          <h4>{wallPost.userName}</h4>
           <p>{wallPost.text}</p>
           </div>
         )}
