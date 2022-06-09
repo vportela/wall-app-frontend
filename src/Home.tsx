@@ -11,6 +11,11 @@ type WallPost = {
     user: string,
     text: string,
 }
+
+type WallPostRequest = {
+  text: string, 
+  userId: string
+}
 type HomeProps = { 
   loggedInUser: SafeUser | undefined,
 }
@@ -22,7 +27,6 @@ type User = {
   userName: string,
   email: string,
   password: string,
-  loggedIn: boolean
 }
 
 
@@ -33,7 +37,8 @@ type FormValues = {
 
 
 function Home(props: HomeProps) {
-
+  const[postFeedback, setPostFeedback] = useState<string>("")
+  const[postFeedbackStyle, setPostFeedbackStyle] = useState<string>("")
   const [wallPosts, setWallPosts] = useState<WallPost[]>([])
   
   useEffect(() => { 
@@ -59,26 +64,26 @@ function Home(props: HomeProps) {
     let newMessage = customTarget.newMessage.value;
     // console.log("newMessage" ,newMessage)
     const lastInArray = wallPosts[wallPosts.length - 1]
-    
-    const myNewMessage = {
-      id: lastInArray.id + 1, 
-      user: "LOGGED IN USER",
-      text: newMessage,
-      loggedInUser: props.loggedInUser
-    }
-  
     // if the user is undefined, dont let them post. you want to prevent
     //the call from ever going into the backend. 
 
     if(props.loggedInUser !== undefined) { 
+      const requestBody: WallPostRequest = {
+        text: newMessage,
+        userId: props.loggedInUser.id
+      }
       // let sendData = () => { //function definition doesnt submit until you call it
-      axios.post<WallPost>("http://localhost:5000/posts", myNewMessage) //api call -
+      axios.post<WallPost>("http://localhost:5000/posts", requestBody) //api call -
         .then((response) => { 
           console.log("New post successfully created! with response", response)
           setWallPosts([ ...wallPosts, response.data,])
         })//if call is successful, this line runs
-        .catch((err) => {
+        .catch((error) => {
           console.log("there was an error")
+          if(error.response.status === 401){ 
+            setPostFeedback(error.response.data)
+            setPostFeedbackStyle("red")
+        }
         })
     }
     
@@ -100,6 +105,7 @@ function Home(props: HomeProps) {
         </div>
       </div>
       <div>
+        <h4 style={{color: postFeedbackStyle}}>{postFeedback}</h4>
         <button onClick={() => {navigate("/registration")}}>Sign up</button>
         <button onClick={() => {navigate("/login")}}>Log in</button>
       </div>
@@ -114,7 +120,7 @@ function Home(props: HomeProps) {
           <button >Say it on the wall</button>
         </form>
       </div>
-    )}
+    )} 
     
     <div>
       {/* try to keep backend and frontend names consistent */}
