@@ -17,8 +17,16 @@ type WallPostRequest = {
   text: string, 
   userId: string
 }
+
+type WallPostDto = { 
+  id: string,
+  text: string,
+  user: SafeUser, 
+}
+
 type HomeProps = { 
   loggedInUser: SafeUser | undefined,
+  setLoggedInUser: (safeUser: SafeUser | undefined) => void
 }
 
 type User = { 
@@ -30,21 +38,23 @@ type User = {
   password: string,
 }
 
-
 type FormValues = { 
   newMessage: {value: string}
 } & EventTarget
 
 
 
-function Home(props: HomeProps) {
+function Home({loggedInUser, setLoggedInUser}: HomeProps) {
   const[postFeedback, setPostFeedback] = useState<string>("")
   const[postFeedbackStyle, setPostFeedbackStyle] = useState<string>("")
-  const [wallPosts, setWallPosts] = useState<WallPost[]>([])
+  const [wallPosts, setWallPosts] = useState<WallPostDto[]>([])
   
+
+  //make an api call to get the user by id, set the initial state
+  //in order to know the user id you would have to add to the url 
   useEffect(() => { 
     console.log("in useEffect")
-    axios.get<WallPost[]>("http://localhost:5000/posts")
+    axios.get<WallPostDto[]>("http://localhost:5000/posts")
       .then((response) => { 
         console.log("hooray it was successful!! with response", response)
         // const result = response.data
@@ -56,9 +66,24 @@ function Home(props: HomeProps) {
       })
   }, [])
 
+  const handleLogout = (e:React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+
+    axios.post<string>("http://localhost:5000/logout", loggedInUser)
+      .then((response) => { 
+        console.log("props", loggedInUser)
+       
+        setLoggedInUser(undefined)
+        localStorage.clear()
+        
+      })
+      .catch((error) => { 
+        console.log("there has been a big oopsie while signing out")
+      })
 
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  }
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     // console.log("Say it on the wall has been clicked!")
     e.preventDefault();
     const customTarget = e.target as FormValues;
@@ -68,13 +93,13 @@ function Home(props: HomeProps) {
     // if the user is undefined, dont let them post. you want to prevent
     //the call from ever going into the backend. 
 
-    if(props.loggedInUser !== undefined) { 
+    if(loggedInUser !== undefined) { 
       const requestBody: WallPostRequest = {
         text: newMessage,
-        userId: props.loggedInUser.id
+        userId: loggedInUser.id
       }
       // let sendData = () => { //function definition doesnt submit until you call it
-      axios.post<WallPost>("http://localhost:5000/posts", requestBody) //api call -
+      axios.post<WallPostDto>("http://localhost:5000/posts", requestBody) //api call -
         .then((response) => { 
           console.log("New post successfully created! with response", response)
           
@@ -92,7 +117,7 @@ function Home(props: HomeProps) {
     console.log("wallposts", wallPosts)
 
   }
-
+console.log("props.loggedInUser", loggedInUser)
   
   let navigate = useNavigate();
 
@@ -102,20 +127,23 @@ function Home(props: HomeProps) {
     <div style={{display: "flex", alignItems: "center", justifyContent:"space-around"}}>
       <div>
         <h1 onClick={() => {navigate("/")}}>The Wall</h1>
-        <div>
-          <h6>logged in user: {props.loggedInUser?.userName}</h6>
-        </div>
+        {loggedInUser && (
+          <div>
+            <h6>logged in user: {loggedInUser?.userName}</h6>
+          </div>
+        )}
       </div>
       <div>
         <h4 style={{color: postFeedbackStyle}}>{postFeedback}</h4>
         <button onClick={() => {navigate("/registration")}}>Sign up</button>
         <button onClick={() => {navigate("/login")}}>Log in</button>
+        <button onClick={(e) => handleLogout(e)}>Log out</button>
       </div>
     </div>
 
   
     {/* {If loggedInUser is NOT undefined && (render whats in here) } */}
-    {props.loggedInUser !== undefined && (
+    {loggedInUser && (
       <div style={{display: "flex", justifyContent: "center"}}>
         <form onSubmit={(e) => handleSubmit(e)}>
           <input type="text" name='newMessage'></input>
@@ -128,7 +156,7 @@ function Home(props: HomeProps) {
       {/* try to keep backend and frontend names consistent */}
       {wallPosts.map((wallPost) => 
         <div key={wallPost.id}>
-          <h4>{wallPost.userName}</h4>
+          <h4>{wallPost.user.userName}</h4>
           <p>{wallPost.text}</p>
           </div>
         )}

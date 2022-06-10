@@ -18,12 +18,13 @@ import {
 
 function App() {
   const localStorageUser: SafeUser | undefined = JSON.parse(localStorage.getItem('loggedInUser')!) 
+  //have to change the localstorageuser to undefined, THEN change the state of loggedInUser, because local storage is the initial 
   const [loggedInUser, setLoggedInUser] = useState<SafeUser | undefined>(localStorageUser)
   console.log("loggedInUser", loggedInUser)
   return (
     <div className="App">
         <Routes>
-          <Route path="/" element={<Home loggedInUser={loggedInUser} />}/>
+          <Route path="/" element={<Home loggedInUser={loggedInUser} setLoggedInUser={setLoggedInUser}/>}/>
           <Route path="/registration" element={<Registration/>}/>
           <Route path="/login" element={<Login setLoggedInUser={setLoggedInUser}/>}/>
         </Routes>
