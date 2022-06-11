@@ -50,7 +50,7 @@ function Home({loggedInUser, setLoggedInUser}: HomeProps) {
   const[postFeedback, setPostFeedback] = useState<string>("")
   const[postFeedbackStyle, setPostFeedbackStyle] = useState<string>("")
   const [wallPosts, setWallPosts] = useState<WallPost[]>([])
-  
+  const navigate = useNavigate();
 
   //make an api call to get the user by id, set the initial state
   //in order to know the user id you would have to add to the url 
@@ -69,7 +69,6 @@ function Home({loggedInUser, setLoggedInUser}: HomeProps) {
   }, [])
 
   const handleLogout = (e:React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-
     axios.post<string>("http://localhost:5000/logout", loggedInUser)
       .then((response) => { 
         console.log("props", loggedInUser)
@@ -114,58 +113,50 @@ function Home({loggedInUser, setLoggedInUser}: HomeProps) {
         }
         })
     }
-    
     console.log("wallposts", wallPosts)
-
   }
-console.log("props.loggedInUser", loggedInUser)
-  
-  let navigate = useNavigate();
+    console.log("props.loggedInUser", loggedInUser)
 
   return (
     <div className="App">
-  
-    <div style={{display: "flex", alignItems: "center", justifyContent:"space-around"}}>
-      <div>
-        <h1 onClick={() => {navigate("/")}}>The Wall</h1>
-        {loggedInUser && (
-          <div>
-            <h6>logged in user: {loggedInUser?.userName}</h6>
-          </div>
-        )}
+    
+      <div style={{display: "flex", alignItems: "center", justifyContent:"space-around"}}>
+        <div>
+          <h1 onClick={() => {navigate("/")}}>The Wall</h1>
+          {loggedInUser && (
+            <div>
+              <h6>logged in user: {loggedInUser?.userName}</h6>
+            </div>
+          )}
+        </div>
+        <div>
+          <h4 style={{color: postFeedbackStyle}}>{postFeedback}</h4>
+          <button onClick={() => {navigate("/registration")}}>Sign up</button>
+          <button onClick={() => {navigate("/login")}}>Log in</button>
+          <button onClick={(e) => handleLogout(e)}>Log out</button>
+        </div>
       </div>
-      <div>
-        <h4 style={{color: postFeedbackStyle}}>{postFeedback}</h4>
-        <button onClick={() => {navigate("/registration")}}>Sign up</button>
-        <button onClick={() => {navigate("/login")}}>Log in</button>
-        <button onClick={(e) => handleLogout(e)}>Log out</button>
-      </div>
-    </div>
 
-  
-    {/* {If loggedInUser is NOT undefined && (render whats in here) } */}
-    {loggedInUser && (
-      <div style={{display: "flex", justifyContent: "center"}}>
-        <form onSubmit={(e) => handleSubmit(e)}>
-          <input type="text" name='newMessage'></input>
-          <button >Say it on the wall</button>
-        </form>
+    
+      {/* {If loggedInUser is NOT undefined && (render whats in here) } */}
+      {loggedInUser && (
+        <div style={{display: "flex", justifyContent: "center"}}>
+          <form onSubmit={(e) => handleSubmit(e)}>
+            <input type="text" name='newMessage'></input>
+            <button >Say it on the wall</button>
+          </form>
+        </div>
+      )} 
+    
+      <div>
+        {wallPosts.map((wallPost) => 
+          <div key={wallPost.id}>
+            <h4>{wallPost.userName}</h4>
+            <p>{wallPost.text}</p>
+            </div>
+          )}
       </div>
-    )} 
-    
-    <div>
-      {/* try to keep backend and frontend names consistent */}
-      {wallPosts.map((wallPost) => 
-        <div key={wallPost.id}>
-          <h4>{wallPost.userName}</h4>
-          <p>{wallPost.text}</p>
-          </div>
-        )}
     </div>
-    {/* <Registration/> */}
-    {/* <Login/> */}
-    
-  </div>
   );
 }
 

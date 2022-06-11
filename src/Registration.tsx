@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useState , useEffect} from 'react';
+import React, { useState } from 'react';
 import {
   useNavigate
 } from 'react-router-dom';
@@ -59,15 +59,14 @@ const Registration = () => {
           .catch((err) => {
             console.log("there was an error")
             setRegistrationErrorMessage("Something went wrong, please try again.")
-
           })
   }
 
     
 
-    return (
-       <div>
-       <div style={{display: "flex", alignItems: "center", justifyContent:"space-around"}}>
+  return (
+    <div>
+      <div style={{display: "flex", alignItems: "center", justifyContent:"space-around"}}>
         <div>
           <h1 onClick={() => {navigate("/")}}>The Wall</h1>
         </div>
@@ -75,12 +74,11 @@ const Registration = () => {
           <button onClick={() => {navigate("/login")}} >Log in</button>
         </div>
       </div>
-
       <div>
-           <h1>Sign up to write on the wall!</h1>
-       </div>
+        <h1>Sign up to write on the wall!</h1>
+      </div>
 
-       <form 
+      <form 
         style={{
           display: "flex", 
           justifyContent: "center", 
@@ -88,21 +86,21 @@ const Registration = () => {
           flexDirection: "column"
         }}
         onSubmit={(e) => handleFormSubmit(e)}
-        >
-           <input type= "text" name='firstName' placeholder='First name'></input>
-           <input type= "text" name='lastName' placeholder='Last name'></input>
-           <input type= "text" name='userName' placeholder='User name'></input>
-           <input type= "text" name='email' placeholder='Email'></input>
-           <input type= "password" name='password' placeholder='Password'></input>
-           <br/>
-           <button>Sign me up!</button>
-           <h5 style={{color: "red"}}>{registrationErrorMessage}</h5>
-       </form >
-       <h3>or</h3>
-       <button onClick={() => {navigate("/")}}>View wall as a guest</button>
-      </div>
-     
-    );
+      >
+        <input type= "text" name='firstName' placeholder='First name'></input>
+        <input type= "text" name='lastName' placeholder='Last name'></input>
+        <input type= "text" name='userName' placeholder='User name'></input>
+        <input type= "text" name='email' placeholder='Email'></input>
+        <input type= "password" name='password' placeholder='Password'></input>
+        <br/>
+        <button>Sign me up!</button>
+        <h5 style={{color: "red"}}>{registrationErrorMessage}</h5>
+        </form >
+        <h3>or</h3>
+        <button onClick={() => {navigate("/")}}>View wall as a guest</button>
+    </div>
+  
+  );
 }
 
 export default Registration;

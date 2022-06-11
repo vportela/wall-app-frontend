@@ -9,19 +9,18 @@ import {
 } from 'react-router-dom';
 import axios from 'axios';
 
-// TODO: Associate the user created post to the user. (primary key and foreign key).
-//user id should display the user that created the post
-//add some more users to the backend, make the posts associate with the existing users.
-// TODO: display existing created posts
-  //set up initial data
-// TODO: display all posts and their associated users
-// TODO: database time babey. 
+// TODO: email whoever you need to email and say you are done and send github urls, frontend
+// AND backend links. 
+// TODO: complete readme, explain how the app does and give a quick description. 1-2 lines and
+// how to get it started (this is in the vid)
+//TODO: spend another couple hours on this cleaning up the TODOS making things simpler
+//TODO: explain and understand all the code 
 
 function App() {
 
   const [loggedInUser, setLoggedInUser] = useState<SafeUser>()
   console.log("loggedInUser", loggedInUser)
-  
+
   useEffect(() => {
     axios.get<SafeUser>("http://localhost:5000/authenticate")
       .then(response => {
