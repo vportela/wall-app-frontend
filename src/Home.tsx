@@ -77,7 +77,7 @@ function Home({loggedInUser, setLoggedInUser}: HomeProps) {
         
       })
       .catch((error) => { 
-        console.log("there has been a big oopsie while signing out")
+        console.log("there has been a big oopsie while signing out", error.response.data)
       })
 
 
