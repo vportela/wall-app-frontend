@@ -6,6 +6,8 @@ import {
 } from 'react-router-dom';
 import { SafeUser } from './Login';
 
+
+
 type WallPost = {
     id: number,
     text: string,
@@ -47,14 +49,14 @@ type FormValues = {
 function Home({loggedInUser, setLoggedInUser}: HomeProps) {
   const[postFeedback, setPostFeedback] = useState<string>("")
   const[postFeedbackStyle, setPostFeedbackStyle] = useState<string>("")
-  const [wallPosts, setWallPosts] = useState<WallPostDto[]>([])
+  const [wallPosts, setWallPosts] = useState<WallPost[]>([])
   
 
   //make an api call to get the user by id, set the initial state
   //in order to know the user id you would have to add to the url 
   useEffect(() => { 
     console.log("in useEffect")
-    axios.get<WallPostDto[]>("http://localhost:5000/posts")
+    axios.get<WallPost[]>("http://localhost:5000/posts")
       .then((response) => { 
         console.log("hooray it was successful!! with response", response)
         // const result = response.data
@@ -99,7 +101,7 @@ function Home({loggedInUser, setLoggedInUser}: HomeProps) {
         userId: loggedInUser.id
       }
       // let sendData = () => { //function definition doesnt submit until you call it
-      axios.post<WallPostDto>("http://localhost:5000/posts", requestBody) //api call -
+      axios.post<WallPost>("http://localhost:5000/posts", requestBody) //api call -
         .then((response) => { 
           console.log("New post successfully created! with response", response)
           
@@ -156,7 +158,7 @@ console.log("props.loggedInUser", loggedInUser)
       {/* try to keep backend and frontend names consistent */}
       {wallPosts.map((wallPost) => 
         <div key={wallPost.id}>
-          <h4>{wallPost.user.userName}</h4>
+          <h4>{wallPost.userName}</h4>
           <p>{wallPost.text}</p>
           </div>
         )}
