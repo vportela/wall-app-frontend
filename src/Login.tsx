@@ -76,7 +76,6 @@ function Login(props: LoginProps) {
           .then((response) => { 
             console.log("user successfully logged in", response.data)
             props.setLoggedInUser(response.data)
-            localStorage.setItem("loggedInUser", JSON.stringify(response.data))
             navigate("/")
           })
           .catch((error) => {

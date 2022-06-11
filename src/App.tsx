@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import Login, { SafeUser } from './Login';
 import Registration from './Registration';
@@ -7,6 +7,7 @@ import {
   Routes,
   Route,
 } from 'react-router-dom';
+import axios from 'axios';
 
 // TODO: Associate the user created post to the user. (primary key and foreign key).
 //user id should display the user that created the post
@@ -17,10 +18,21 @@ import {
 // TODO: database time babey. 
 
 function App() {
-  const localStorageUser: SafeUser | undefined = JSON.parse(localStorage.getItem('loggedInUser')!) 
-  //have to change the localstorageuser to undefined, THEN change the state of loggedInUser, because local storage is the initial 
-  const [loggedInUser, setLoggedInUser] = useState<SafeUser | undefined>(localStorageUser)
+
+  const [loggedInUser, setLoggedInUser] = useState<SafeUser>()
   console.log("loggedInUser", loggedInUser)
+  
+  useEffect(() => {
+    axios.get<SafeUser>("http://localhost:5000/authenticate")
+      .then(response => {
+        console.log("response", response)
+        setLoggedInUser(response.data)
+      })
+      .catch(error => { 
+        console.log("error", error)
+      })
+  },[])
+
   return (
     <div className="App">
         <Routes>

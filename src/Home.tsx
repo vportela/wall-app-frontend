@@ -75,7 +75,6 @@ function Home({loggedInUser, setLoggedInUser}: HomeProps) {
         console.log("props", loggedInUser)
        
         setLoggedInUser(undefined)
-        localStorage.clear()
         
       })
       .catch((error) => { 
