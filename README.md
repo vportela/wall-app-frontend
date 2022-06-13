@@ -7,13 +7,13 @@ The wall allows guest users to view a page with posts made by other users. To cr
 - Session cookies
 - React Router Dom
 
-<img src="homePage_guest.png"/>
+<img src="public/homePage_guest.png"/>
 
-<img src="signUp.png"/>
+<img src="public/signUp.png"/>
 
-<img src="loginPage.png"/>
+<img src="public/loginPage.png"/>
 
-<img src="homePage_LoggedIn.png"/>
+<img src="public/homePage_LoggedIn.png"/>
 
 
 
